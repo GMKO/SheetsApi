@@ -350,17 +350,13 @@ public class MainActivity extends Activity
                 sheetID = getSheetId(spreadsheetId,sheetName);
 
                 if(sheetID == 0) {
-                    //Add a new sheet and keep formatting
+                    //Add a new sheet and set the formatting
                     createNewSheet(spreadsheetId, sheetName);
+                    setFormatting(spreadsheetId, sheetID);
 
-                    Integer destId = getSheetId(spreadsheetId, sheetName);
-                    Integer sourceId = getReferenceSheetId(spreadsheetId);
-                    /////////////////////////////////////////////////////////////////////////
-                    Log.d("LOG",String.format("Source ID: %d, Dest ID: %d",destId,sourceId));
-                    /////////////////////////////////////////////////////////////////////////
-                    setFormatting(spreadsheetId, sourceId, destId);
                 } else {
-                    //Clear the sheet of all existing values
+                    //Clear the sheet of all existing values and set the formatting
+                    setFormatting(spreadsheetId, sheetID);
                     clearDataFromSheet(spreadsheetId, sheetID);
                 }
 
@@ -522,7 +518,7 @@ public class MainActivity extends Activity
             this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
         }
 
-        private void setFormatting(String spreadsheetId, Integer sourceId, Integer destId) throws IOException {
+        private void copyFormatting(String spreadsheetId, Integer sourceId, Integer destId) throws IOException {
 
             //Create a new copyPasteRequest
             CopyPasteRequest copyPasteRequest = new CopyPasteRequest();
@@ -561,6 +557,42 @@ public class MainActivity extends Activity
             //Create a new request with containing the updateCellsRequest and add it to the requestList
             Request request = new Request();
             request.setCopyPaste(copyPasteRequest);
+            requestsList.add(request);
+
+            //Add the requestList to the batchUpdateSpreadsheetRequest
+            batchUpdateSpreadsheetRequest.setRequests(requestsList);
+
+            //Call the sheets API to execute the batchUpdate
+            this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
+        }
+
+        private void setFormatting(String spreadsheetId, Integer sheetID)  throws IOException {
+
+            UpdateDimensionPropertiesRequest updateDimensionPropertiesRequest = new UpdateDimensionPropertiesRequest();
+
+            DimensionRange dimensionRange = new DimensionRange();
+            dimensionRange.setSheetId(sheetID);
+            dimensionRange.setDimension("COLUMNS");
+            dimensionRange.setStartIndex(0);
+            dimensionRange.setEndIndex(6);
+
+            DimensionProperties dimensionProperties = new DimensionProperties();
+            dimensionProperties.setPixelSize(200);
+
+            updateDimensionPropertiesRequest.setRange(dimensionRange);
+            updateDimensionPropertiesRequest.setProperties(dimensionProperties);
+            updateDimensionPropertiesRequest.setFields("pixelSize");
+
+            //Create batchUpdateSpreadsheetRequest
+            BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
+
+            //Create requestList and set it on the batchUpdateSpreadsheetRequest
+            List<Request> requestsList = new ArrayList<Request>();
+            batchUpdateSpreadsheetRequest.setRequests(requestsList);
+
+            //Create a new request with containing the updateCellsRequest and add it to the requestList
+            Request request = new Request();
+            request.setUpdateDimensionProperties(updateDimensionPropertiesRequest);
             requestsList.add(request);
 
             //Add the requestList to the batchUpdateSpreadsheetRequest
