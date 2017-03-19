@@ -345,7 +345,7 @@ public class MainActivity extends Activity
                 Integer sheetID = 0;
                 String sheetName = mCredential.getSelectedAccountName();
                 String spreadsheetId = "1TRaC86Ehrt2CJunrhc_3VwNnQ5n7GSLCNgSfASehwcs";
-                String range = String.format("%s!A1:B",sheetName);//"Sheet1!A1:B";
+                String range = String.format("%s!A1:F",sheetName);//"Sheet1!A1:B";
 
                 //Check if the sheet exists and clear all the values, if not, create a new one with the user's name
                 Spreadsheet response1= this.mService.spreadsheets().get(spreadsheetId).setIncludeGridData (false).execute ();
@@ -460,10 +460,19 @@ public class MainActivity extends Activity
             //I simply want to edit a single row, so I use a single list of objects
             List<Object> data1 = new ArrayList<>();
             List<Object> data2 = new ArrayList<>();
-            data1.add("1");
-            data1.add("2");
-            data2.add("3");
-            data2.add("4");
+            data1.add("Network");
+            data1.add("SSID");
+            data1.add("BSSID");
+            data1.add("Frequency");
+            data1.add("Level of Intensity");
+            data1.add("Capabilities");
+            data2.add("#1");
+            data2.add("DEUSVULT");
+            data2.add("56:17:31:79:d0:5b");
+            data2.add("2412");
+            data2.add("9");
+            data2.add("[WPA2-PSK-CCMP][EES]");
+
 
             //There are obviously more dynamic ways to do these, but you get the picture
             values.add(data1);
