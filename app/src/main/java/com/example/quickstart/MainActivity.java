@@ -359,64 +359,13 @@ public class MainActivity extends Activity
                         break;
                     }
                 }
-                //Add a new sheet
                 if(createNewSheet == true) {
-                    //Create a new AddSheetRequest
-                    AddSheetRequest addSheetRequest = new AddSheetRequest();
-                    SheetProperties sheetProperties = new SheetProperties();
+                    //Add a new sheet
+                    createNewSheet(spreadsheetId, sheetName);
 
-                    //Add the sheetName to the sheetProperties
-                    addSheetRequest.setProperties(sheetProperties);
-                    addSheetRequest.setProperties(sheetProperties.setTitle(sheetName));
-
-                    //Create batchUpdateSpreadsheetRequest
-                    BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
-
-                    //Create requestList and set it on the batchUpdateSpreadsheetRequest
-                    List<Request> requestsList = new ArrayList<Request>();
-                    batchUpdateSpreadsheetRequest.setRequests(requestsList);
-
-                    //Create a new request with containing the addSheetRequest and add it to the requestList
-                    Request request = new Request();
-                    request.setAddSheet(addSheetRequest);
-                    requestsList.add(request);
-
-                    //Add the requestList to the batchUpdateSpreadsheetRequest
-                    batchUpdateSpreadsheetRequest.setRequests(requestsList);
-
-                    //Call the sheets API to execute the batchUpdate
-                    this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
                 } else {
                     //Clear the sheet of all existing values
-                    //Create a new updateCellsRequest
-                    String fields = "userEnteredValue";
-                    UpdateCellsRequest updateCellsRequest = new UpdateCellsRequest();
-
-                    //Create a new gridRange with the sheetID property set to the ID of the selected sheet
-                    GridRange gridRange = new GridRange();
-                    gridRange.setSheetId(sheetID);
-
-                    //Set the range and fields in the updateCellRequest
-                    updateCellsRequest.setRange(gridRange);
-                    updateCellsRequest.setFields(fields);
-
-                    //Create batchUpdateSpreadsheetRequest
-                    BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
-
-                    //Create requestList and set it on the batchUpdateSpreadsheetRequest
-                    List<Request> requestsList = new ArrayList<Request>();
-                    batchUpdateSpreadsheetRequest.setRequests(requestsList);
-
-                    //Create a new request with containing the updateCellsRequest and add it to the requestList
-                    Request request = new Request();
-                    request.setUpdateCells(updateCellsRequest);
-                    requestsList.add(request);
-
-                    //Add the requestList to the batchUpdateSpreadsheetRequest
-                    batchUpdateSpreadsheetRequest.setRequests(requestsList);
-
-                    //Call the sheets API to execute the batchUpdate
-                    this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
+                    clearDataFromSheet(spreadsheetId, sheetID);
                 }
 
                 writeDataToSheet(spreadsheetId, range);
@@ -492,6 +441,68 @@ public class MainActivity extends Activity
 
             //Try calling this method before executing the readDataFromApi method,
             //and you'll see the immediate change
+        }
+
+        private void createNewSheet(String spreadsheetId, String sheetName)  throws IOException{
+
+            //Create a new AddSheetRequest
+            AddSheetRequest addSheetRequest = new AddSheetRequest();
+            SheetProperties sheetProperties = new SheetProperties();
+
+            //Add the sheetName to the sheetProperties
+            addSheetRequest.setProperties(sheetProperties);
+            addSheetRequest.setProperties(sheetProperties.setTitle(sheetName));
+
+            //Create batchUpdateSpreadsheetRequest
+            BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
+
+            //Create requestList and set it on the batchUpdateSpreadsheetRequest
+            List<Request> requestsList = new ArrayList<Request>();
+            batchUpdateSpreadsheetRequest.setRequests(requestsList);
+
+            //Create a new request with containing the addSheetRequest and add it to the requestList
+            Request request = new Request();
+            request.setAddSheet(addSheetRequest);
+            requestsList.add(request);
+
+            //Add the requestList to the batchUpdateSpreadsheetRequest
+            batchUpdateSpreadsheetRequest.setRequests(requestsList);
+
+            //Call the sheets API to execute the batchUpdate
+            this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
+        }
+
+        private void clearDataFromSheet(String spreadsheetId, Integer sheetID)  throws IOException {
+
+            //Create a new updateCellsRequest
+            String fields = "userEnteredValue";
+            UpdateCellsRequest updateCellsRequest = new UpdateCellsRequest();
+
+            //Create a new gridRange with the sheetID property set to the ID of the selected sheet
+            GridRange gridRange = new GridRange();
+            gridRange.setSheetId(sheetID);
+
+            //Set the range and fields in the updateCellRequest
+            updateCellsRequest.setRange(gridRange);
+            updateCellsRequest.setFields(fields);
+
+            //Create batchUpdateSpreadsheetRequest
+            BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
+
+            //Create requestList and set it on the batchUpdateSpreadsheetRequest
+            List<Request> requestsList = new ArrayList<Request>();
+            batchUpdateSpreadsheetRequest.setRequests(requestsList);
+
+            //Create a new request with containing the updateCellsRequest and add it to the requestList
+            Request request = new Request();
+            request.setUpdateCells(updateCellsRequest);
+            requestsList.add(request);
+
+            //Add the requestList to the batchUpdateSpreadsheetRequest
+            batchUpdateSpreadsheetRequest.setRequests(requestsList);
+
+            //Call the sheets API to execute the batchUpdate
+            this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
         }
 
         @Override
