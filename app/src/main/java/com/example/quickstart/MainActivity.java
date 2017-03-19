@@ -348,18 +348,9 @@ public class MainActivity extends Activity
                 String range = String.format("%s!A1:F",sheetName);//"Sheet1!A1:B";
 
                 //Check if the sheet exists and clear all the values, if not, create a new one with the user's name
-                Spreadsheet response1= this.mService.spreadsheets().get(spreadsheetId).setIncludeGridData (false).execute ();
+                sheetID = getSheetId(spreadsheetId,sheetName);
 
-                List<Sheet> workSheetList = response1.getSheets();
-
-                for (Sheet sheet : workSheetList) {
-                    if(sheet.getProperties().getTitle().equals(sheetName)) {
-                        createNewSheet = false;
-                        sheetID = sheet.getProperties().getSheetId();
-                        break;
-                    }
-                }
-                if(createNewSheet == true) {
+                if(sheetID == 0) {
                     //Add a new sheet
                     createNewSheet(spreadsheetId, sheetName);
 
@@ -401,6 +392,21 @@ public class MainActivity extends Activity
             return results;
         }
 
+        private Integer getSheetId(String spreadsheetId, String sheetName) throws IOException {
+
+            Integer sheetID = 0;
+            Spreadsheet response1= this.mService.spreadsheets().get(spreadsheetId).setIncludeGridData (false).execute ();
+            List<Sheet> workSheetList = response1.getSheets();
+
+            for (Sheet sheet : workSheetList) {
+                if(sheet.getProperties().getTitle().equals(sheetName)) {
+                    sheetID = sheet.getProperties().getSheetId();
+                    break;
+                }
+            }
+            return sheetID;
+        }
+
         private void writeDataToSheet(String spreadsheetId, String range) throws IOException {
             //for the values that you want to input, create a list of object lists
             List<List<Object>> values = new ArrayList<>();
@@ -415,7 +421,7 @@ public class MainActivity extends Activity
             data1.add("Frequency");
             data1.add("Level of Intensity");
             data1.add("Capabilities");
-            data2.add("#1");
+            data2.add("#2");
             data2.add("DEUSVULT");
             data2.add("56:17:31:79:d0:5b");
             data2.add("2412");
