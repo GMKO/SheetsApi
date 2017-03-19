@@ -406,14 +406,6 @@ public class MainActivity extends Activity
             return sheetID;
         }
 
-        private Integer getReferenceSheetId(String spreadsheetId) throws IOException {
-
-            Spreadsheet response1= this.mService.spreadsheets().get(spreadsheetId).setIncludeGridData (false).execute ();
-            List<Sheet> workSheetList = response1.getSheets();
-
-            return workSheetList.get(0).getProperties().getSheetId();
-        }
-
         private void writeDataToSheet(String spreadsheetId, String range) throws IOException {
             //for the values that you want to input, create a list of object lists
             List<List<Object>> values = new ArrayList<>();
@@ -509,54 +501,6 @@ public class MainActivity extends Activity
             //Create a new request with containing the updateCellsRequest and add it to the requestList
             Request request = new Request();
             request.setUpdateCells(updateCellsRequest);
-            requestsList.add(request);
-
-            //Add the requestList to the batchUpdateSpreadsheetRequest
-            batchUpdateSpreadsheetRequest.setRequests(requestsList);
-
-            //Call the sheets API to execute the batchUpdate
-            this.mService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest).execute();
-        }
-
-        private void copyFormatting(String spreadsheetId, Integer sourceId, Integer destId) throws IOException {
-
-            //Create a new copyPasteRequest
-            CopyPasteRequest copyPasteRequest = new CopyPasteRequest();
-
-            //Create the GridRange for the source sheet
-            GridRange sourceRange = new GridRange();
-            sourceRange.setSheetId(sourceId);
-            sourceRange.setStartRowIndex(0);
-            sourceRange.setEndRowIndex(100);
-            sourceRange.setStartColumnIndex(0);
-            sourceRange.setStartColumnIndex(5);
-
-            //Create the GridRange for the destination sheet
-            GridRange destRange = new GridRange();
-            destRange.setSheetId(destId);
-            destRange.setStartRowIndex(0);
-            destRange.setEndRowIndex(100);
-            destRange.setStartColumnIndex(0);
-            destRange.setStartColumnIndex(5);
-
-            //Add the source and dest ranges to the request
-            copyPasteRequest.setSource(sourceRange);
-            copyPasteRequest.setDestination(destRange);
-
-            //Set paste type and paste orientation
-            copyPasteRequest.setPasteType("PASTE_FORMAT");
-            copyPasteRequest.setPasteOrientation("NORMAL");
-
-            //Create batchUpdateSpreadsheetRequest
-            BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
-
-            //Create requestList and set it on the batchUpdateSpreadsheetRequest
-            List<Request> requestsList = new ArrayList<Request>();
-            batchUpdateSpreadsheetRequest.setRequests(requestsList);
-
-            //Create a new request with containing the updateCellsRequest and add it to the requestList
-            Request request = new Request();
-            request.setCopyPaste(copyPasteRequest);
             requestsList.add(request);
 
             //Add the requestList to the batchUpdateSpreadsheetRequest
