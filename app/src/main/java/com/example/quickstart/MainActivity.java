@@ -512,24 +512,65 @@ public class MainActivity extends Activity
 
         private void setFormatting(String spreadsheetId, Integer sheetID)  throws IOException {
 
+            //Column 0
             //Create a new updateDimensionPropertiesRequest
-            UpdateDimensionPropertiesRequest updateDimensionPropertiesRequest = new UpdateDimensionPropertiesRequest();
+            UpdateDimensionPropertiesRequest updateDimensionPropertiesRequest1 = new UpdateDimensionPropertiesRequest();
 
             //Create a dimensionRange with the desired attributes
-            DimensionRange dimensionRange = new DimensionRange();
-            dimensionRange.setSheetId(sheetID);
-            dimensionRange.setDimension("COLUMNS");
-            dimensionRange.setStartIndex(0);
-            dimensionRange.setEndIndex(6);
+            DimensionRange dimensionRange1 = new DimensionRange();
+            dimensionRange1.setSheetId(sheetID);
+            dimensionRange1.setDimension("COLUMNS");
+            dimensionRange1.setStartIndex(0);
+            dimensionRange1.setEndIndex(1);
 
             //Create new dimensionProperties specifying the width of the cells
-            DimensionProperties dimensionProperties = new DimensionProperties();
-            dimensionProperties.setPixelSize(200);
+            DimensionProperties dimensionProperties1 = new DimensionProperties();
+            dimensionProperties1.setPixelSize(70);
 
             //Added the range and the properties to the updateDimensionPropertiesRequest
-            updateDimensionPropertiesRequest.setRange(dimensionRange);
-            updateDimensionPropertiesRequest.setProperties(dimensionProperties);
-            updateDimensionPropertiesRequest.setFields("pixelSize");
+            updateDimensionPropertiesRequest1.setRange(dimensionRange1);
+            updateDimensionPropertiesRequest1.setProperties(dimensionProperties1);
+            updateDimensionPropertiesRequest1.setFields("pixelSize");
+
+            //Columns 1 to 5
+            //Create a new updateDimensionPropertiesRequest
+            UpdateDimensionPropertiesRequest updateDimensionPropertiesRequest2 = new UpdateDimensionPropertiesRequest();
+
+            //Create a dimensionRange with the desired attributes
+            DimensionRange dimensionRange2 = new DimensionRange();
+            dimensionRange2.setSheetId(sheetID);
+            dimensionRange2.setDimension("COLUMNS");
+            dimensionRange2.setStartIndex(1);
+            dimensionRange2.setEndIndex(5);
+
+            //Create new dimensionProperties specifying the width of the cells
+            DimensionProperties dimensionProperties2 = new DimensionProperties();
+            dimensionProperties2.setPixelSize(200);
+
+            //Added the range and the properties to the updateDimensionPropertiesRequest
+            updateDimensionPropertiesRequest2.setRange(dimensionRange2);
+            updateDimensionPropertiesRequest2.setProperties(dimensionProperties2);
+            updateDimensionPropertiesRequest2.setFields("pixelSize");
+
+            //Column 6
+            //Create a new updateDimensionPropertiesRequest
+            UpdateDimensionPropertiesRequest updateDimensionPropertiesRequest3 = new UpdateDimensionPropertiesRequest();
+
+            //Create a dimensionRange with the desired attributes
+            DimensionRange dimensionRange3 = new DimensionRange();
+            dimensionRange3.setSheetId(sheetID);
+            dimensionRange3.setDimension("COLUMNS");
+            dimensionRange3.setStartIndex(5);
+            dimensionRange3.setEndIndex(6);
+
+            //Create new dimensionProperties specifying the width of the cells
+            DimensionProperties dimensionProperties3 = new DimensionProperties();
+            dimensionProperties3.setPixelSize(250);
+
+            //Added the range and the properties to the updateDimensionPropertiesRequest
+            updateDimensionPropertiesRequest3.setRange(dimensionRange3);
+            updateDimensionPropertiesRequest3.setProperties(dimensionProperties3);
+            updateDimensionPropertiesRequest3.setFields("pixelSize");
 
             //Create batchUpdateSpreadsheetRequest
             BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
@@ -538,10 +579,16 @@ public class MainActivity extends Activity
             List<Request> requestsList = new ArrayList<Request>();
             batchUpdateSpreadsheetRequest.setRequests(requestsList);
 
-            //Create a new request with containing the setUpdateDimensionProperties and add it to the requestList
-            Request request = new Request();
-            request.setUpdateDimensionProperties(updateDimensionPropertiesRequest);
-            requestsList.add(request);
+            //Create a new request list containing all the updateDimensionPropertiesRequests
+            Request request1 = new Request();
+            request1.setUpdateDimensionProperties(updateDimensionPropertiesRequest1);
+            Request request2 = new Request();
+            request2.setUpdateDimensionProperties(updateDimensionPropertiesRequest2);
+            Request request3 = new Request();
+            request3.setUpdateDimensionProperties(updateDimensionPropertiesRequest3);
+            requestsList.add(request1);
+            requestsList.add(request2);
+            requestsList.add(request3);
 
             //Add the requestList to the batchUpdateSpreadsheetRequest
             batchUpdateSpreadsheetRequest.setRequests(requestsList);
