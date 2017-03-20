@@ -421,7 +421,7 @@ public class MainActivity extends Activity
             data1.add("Frequency");
             data1.add("Level of Intensity");
             data1.add("Capabilities");
-            data2.add("#1");
+            data2.add("#2");
             data2.add("DEUSVULT");
             data2.add("56:17:31:79:d0:5b");
             data2.add("2412");
