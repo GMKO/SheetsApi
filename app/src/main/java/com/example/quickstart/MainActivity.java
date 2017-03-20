@@ -512,17 +512,21 @@ public class MainActivity extends Activity
 
         private void setFormatting(String spreadsheetId, Integer sheetID)  throws IOException {
 
+            //Create a new updateDimensionPropertiesRequest
             UpdateDimensionPropertiesRequest updateDimensionPropertiesRequest = new UpdateDimensionPropertiesRequest();
 
+            //Create a dimensionRange with the desired attributes
             DimensionRange dimensionRange = new DimensionRange();
             dimensionRange.setSheetId(sheetID);
             dimensionRange.setDimension("COLUMNS");
             dimensionRange.setStartIndex(0);
             dimensionRange.setEndIndex(6);
 
+            //Create new dimensionProperties specifying the width of the cells
             DimensionProperties dimensionProperties = new DimensionProperties();
             dimensionProperties.setPixelSize(200);
 
+            //Added the range and the properties to the updateDimensionPropertiesRequest
             updateDimensionPropertiesRequest.setRange(dimensionRange);
             updateDimensionPropertiesRequest.setProperties(dimensionProperties);
             updateDimensionPropertiesRequest.setFields("pixelSize");
@@ -534,7 +538,7 @@ public class MainActivity extends Activity
             List<Request> requestsList = new ArrayList<Request>();
             batchUpdateSpreadsheetRequest.setRequests(requestsList);
 
-            //Create a new request with containing the updateCellsRequest and add it to the requestList
+            //Create a new request with containing the setUpdateDimensionProperties and add it to the requestList
             Request request = new Request();
             request.setUpdateDimensionProperties(updateDimensionPropertiesRequest);
             requestsList.add(request);
