@@ -130,7 +130,8 @@ public class MainActivity extends Activity
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            mOutputText.setText("No network connection available.");
+            String setText = "No network connection available.";
+            mOutputText.setText(setText);
         } else {
             new MakeRequestTask(mCredential).execute();
         }
@@ -188,9 +189,9 @@ public class MainActivity extends Activity
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mOutputText.setText(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                    String setText = "This app requires Google Play Services. Please install " +
+                            "Google Play Services on your device and relaunch this app.";
+                    mOutputText.setText(setText);
                 } else {
                     getResultsFromApi();
                 }
@@ -341,7 +342,7 @@ public class MainActivity extends Activity
             try {
                 //Set sheet name
                 //Can be any string, I chose to set it to the account name
-                Integer sheetID = 0;
+                Integer sheetID;
                 String sheetName = mCredential.getSelectedAccountName();
                 String spreadsheetId = "1TRaC86Ehrt2CJunrhc_3VwNnQ5n7GSLCNgSfASehwcs";
                 String range = String.format("%s!A1:F",sheetName);//"Sheet1!A1:B";
@@ -376,7 +377,7 @@ public class MainActivity extends Activity
          * @throws IOException
          */
         private List<String> getDataFromApi(String spreadsheetId, String range) throws IOException {
-            List<String> results = new ArrayList<String>();
+            List<String> results = new ArrayList<>();
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
@@ -462,7 +463,7 @@ public class MainActivity extends Activity
             BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
 
             //Create requestList and set it on the batchUpdateSpreadsheetRequest
-            List<Request> requestsList = new ArrayList<Request>();
+            List<Request> requestsList = new ArrayList<>();
             batchUpdateSpreadsheetRequest.setRequests(requestsList);
 
             //Create a new request with containing the addSheetRequest and add it to the requestList
@@ -495,7 +496,7 @@ public class MainActivity extends Activity
             BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
 
             //Create requestList and set it on the batchUpdateSpreadsheetRequest
-            List<Request> requestsList = new ArrayList<Request>();
+            List<Request> requestsList = new ArrayList<>();
             batchUpdateSpreadsheetRequest.setRequests(requestsList);
 
             //Create a new request with containing the updateCellsRequest and add it to the requestList
@@ -576,7 +577,7 @@ public class MainActivity extends Activity
             BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
 
             //Create requestList and set it on the batchUpdateSpreadsheetRequest
-            List<Request> requestsList = new ArrayList<Request>();
+            List<Request> requestsList = new ArrayList<>();
             batchUpdateSpreadsheetRequest.setRequests(requestsList);
 
             //Create a new request list containing all the updateDimensionPropertiesRequests
@@ -607,7 +608,8 @@ public class MainActivity extends Activity
         protected void onPostExecute(List<String> output) {
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+                String setText = "No results returned.";
+                mOutputText.setText(setText);
             } else {
                 output.add(0, "Data retrieved using the Google Sheets API:");
                 mOutputText.setText(TextUtils.join("\n", output));
@@ -627,11 +629,13 @@ public class MainActivity extends Activity
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             MainActivity.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    String setText = "The following error occurred:\n"
+                            + mLastError.getMessage();
+                    mOutputText.setText(setText);
                 }
             } else {
-                mOutputText.setText("Request cancelled.");
+                String setText = "Request cancelled.";
+                mOutputText.setText(setText);
             }
         }
     }
